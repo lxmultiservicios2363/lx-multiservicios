@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // ======================
-  // MODO OSCURO - SISTEMA OPERATIVO (AUTOMÁTICO)
+  // MODO OSCURO - SISTEMA OPERATIVO
   // ======================
-  darkMode: 'media', // ✅ CAMBIADO: 'class' → 'media'
+  darkMode: 'media',
   
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -16,12 +16,12 @@ module.exports = {
       // BREAKPOINTS PERSONALIZADOS
       // ======================
       screens: {
-        'xs': '475px',    // Extra small devices
-        'sm': '640px',    // Small devices
-        'md': '768px',    // Medium devices
-        'lg': '1024px',   // Large devices
-        'xl': '1280px',   // Extra large
-        '2xl': '1536px',  // 2X large
+        'xs': '475px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
       },
       
       // ======================
@@ -34,7 +34,7 @@ module.exports = {
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#3b82f6', // Azul principal
+          500: '#3b82f6',
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',
@@ -55,9 +55,6 @@ module.exports = {
           500: '#ef4444',
           600: '#dc2626',
         },
-        // ======================
-        // COLORS PARA MODO OSCURO
-        // ======================
         gray: {
           50: '#f9fafb',
           100: '#f3f4f6',
@@ -86,18 +83,12 @@ module.exports = {
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
       },
 
-      // ======================
-      // ESPACIADO RESPONSIVE
-      // ======================
       spacing: {
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
       },
 
-      // ======================
-      // ANIMACIONES Y TRANSICIONES
-      // ======================
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
@@ -118,14 +109,10 @@ module.exports = {
         },
       },
 
-      // ======================
-      // SOMBRAS Y BORDES + MODO OSCURO
-      // ======================
       boxShadow: {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.1), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
         'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.04)',
         'large': '0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 30px -10px rgba(0, 0, 0, 0.05)',
-        // Sombras para modo oscuro
         'dark-soft': '0 2px 15px -3px rgba(0, 0, 0, 0.3), 0 10px 20px -2px rgba(0, 0, 0, 0.2)',
         'dark-medium': '0 4px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 20px -5px rgba(0, 0, 0, 0.2)',
         'dark-large': '0 10px 40px -10px rgba(0, 0, 0, 0.3), 0 10px 30px -10px rgba(0, 0, 0, 0.2)',
@@ -134,9 +121,6 @@ module.exports = {
         '4xl': '2rem',
       },
 
-      // ======================
-      // BACKGROUNDS PARA MODO OSCURO
-      // ======================
       backgroundColor: {
         'dark-primary': '#111827',
         'dark-secondary': '#1f2937',

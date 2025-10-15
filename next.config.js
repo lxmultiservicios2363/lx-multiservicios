@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Seguridad: Oculta que usas Next.js
-  poweredByHeader: false,
+  // Desactivar Turbopack para evitar errores de CSS
+  experimental: {
+    turbo: undefined,
+  },
   
-  // Compresión para mejor rendimiento
+  // Configuraciones de seguridad
+  poweredByHeader: false,
   compress: true,
   
   // Configuración de imágenes
@@ -12,7 +15,7 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   
-  // Headers de seguridad globales
+  // Headers de seguridad
   async headers() {
     return [
       {
