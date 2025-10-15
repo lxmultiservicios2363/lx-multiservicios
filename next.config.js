@@ -9,7 +9,7 @@ const nextConfig = {
   
   // Desactivar completamente características experimentales
   experimental: {
-    turbo: false
+    // ELIMINADO: turbo: false (causaba error en Next.js 14)
   }
 }
 
