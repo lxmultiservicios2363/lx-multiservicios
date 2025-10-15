@@ -9,6 +9,7 @@ const nextConfig = {
   
   // Desactivar completamente características experimentales
   experimental: {
+    turbo: false
   }
 }
 
