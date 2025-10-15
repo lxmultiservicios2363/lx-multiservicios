@@ -1,42 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Desactivar Turbopack para evitar errores de CSS
-  experimental: {
-    turbo: undefined,
-  },
+  // CONFIGURACIÓN MÍNIMA - SIN TURBOPACK
+  output: 'standalone',
   
-  // Configuraciones de seguridad
-  poweredByHeader: false,
-  compress: true,
-  
-  // Configuración de imágenes
   images: {
     domains: ['localhost'],
-    formats: ['image/webp', 'image/avif'],
   },
   
-  // Headers de seguridad
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
-      },
-    ];
-  },
-};
+  // Desactivar completamente características experimentales
+  experimental: {
+  }
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
