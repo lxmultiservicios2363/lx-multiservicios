@@ -34,7 +34,15 @@ export default function ProductCard({ id, nombre, precio, tallas, stockBySize, i
   const addWithTalla = (talla: string) => {
     const available = stockBySize[talla] ?? 0;
     if (available <= 0) return alert("Agotado en esa talla");
-    addItem({ id, talla, nombre, precio, cantidad: 1, img: images[0] });
+    addItem({ 
+      id: `${id}-${talla}`, 
+      productId: id,
+      talla, 
+      name: nombre, 
+      price: precio, 
+      quantity: 1, 
+      image: images[0] 
+    });
     // small feedback
     alert("Agregado al carrito");
   };
