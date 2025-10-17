@@ -1,4 +1,4 @@
-// src/app/catalogo/page.tsx - GRID COMPLETAMENTE OPTIMIZADO
+// src/app/catalogo/page.tsx - CATÁLOGO COMPLETAMENTE OPTIMIZADO
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
@@ -30,50 +30,52 @@ export default async function CatalogPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 sm:py-10 px-3 sm:px-4">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Título optimizado */}
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-900 dark:text-white">
+        {/* ✅ TÍTULO OPTIMIZADO PARA MÓVIL */}
+        <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center text-gray-900 dark:text-white">
           Catálogo
         </h1>
 
-        {/* Grid completamente responsive - OPTIMIZADO */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
-          {categories.map((c) => (
+        {/* ✅ GRID 2 COLUMNAS MÓVIL - COMPLETAMENTE RESPONSIVE */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 xs:gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+          {categories.map((c, index) => (
             <article 
               key={c.slug} 
-              className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm sm:shadow overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-md sm:hover:shadow-lg transition-all duration-300"
+              className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl md:rounded-2xl shadow-xs sm:shadow-sm overflow-hidden border border-gray-100 dark:border-gray-600 hover:shadow-md sm:hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
             >
-              {/* Imagen optimizada para móvil */}
-              <div className="relative w-full h-[160px] xs:h-[180px] sm:h-[200px] md:h-[220px] lg:h-[240px] xl:h-[260px]">
+              {/* ✅ CONTENEDOR DE IMAGEN OPTIMIZADO POR DISPOSITIVO */}
+              <div className="relative w-full aspect-square">
                 {c.cover ? (
                   <Image
                     src={c.cover}
                     alt={c.title}
                     fill
                     style={{ objectFit: "cover" }}
-                    className="transition-transform duration-300 hover:scale-105"
-                    sizes="(max-width: 475px) 100vw, (max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                    priority={categories.indexOf(c) < 6}
+                    className="transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                    priority={index < 4} // ✅ LOADING OPTIMIZADO: Solo primeras 4 imágenes
+                    loading={index >= 4 ? "lazy" : "eager"}
+                    quality={75}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 text-sm sm:text-base">
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 text-xs sm:text-sm p-2">
                     Sin imagen
                   </div>
                 )}
               </div>
 
-              {/* Contenido optimizado */}
-              <div className="p-3 sm:p-4 text-center">
-                <h2 className="text-base sm:text-lg font-semibold mb-2 text-gray-900 dark:text-white line-clamp-2">
+              {/* ✅ CONTENIDO OPTIMIZADO PARA MÓVIL Y DESKTOP */}
+              <div className="p-2 xs:p-3 sm:p-4 text-center space-y-1 xs:space-y-2">
+                <h2 className="text-xs xs:text-sm sm:text-base font-semibold text-gray-900 dark:text-white line-clamp-2 min-h-[2.5em] leading-tight">
                   {c.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
+                <p className="text-[10px] xs:text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   {c.count} producto{c.count !== 1 ? 's' : ''}
                 </p>
                 <Link
                   href={`/catalogo/${c.slug}`}
-                  className="inline-block bg-blue-600 dark:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all duration-200 text-xs sm:text-sm font-medium min-w-[90px] sm:min-w-[100px]"
+                  className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 rounded-md xs:rounded-lg text-[10px] xs:text-xs sm:text-sm font-medium min-w-[60px] xs:min-w-[70px] sm:min-w-[80px] transition-all duration-200 hover:scale-105 shadow-xs hover:shadow-sm"
                 >
                   Ver más
                 </Link>
@@ -81,6 +83,19 @@ export default async function CatalogPage() {
             </article>
           ))}
         </div>
+
+        {/* ✅ LOADING STATES OPTIMIZADOS (Opcional - para mejor UX) */}
+        {categories.length === 0 && (
+          <div className="text-center py-8 sm:py-12">
+            <div className="animate-pulse">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+                {[...Array(10)].map((_, i) => (
+                  <div key={i} className="bg-gray-200 dark:bg-gray-700 rounded-lg h-[200px] animate-pulse"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

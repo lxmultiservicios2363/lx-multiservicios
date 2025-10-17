@@ -1,4 +1,4 @@
-// src/app/catalogo/[category]/page.tsx - CON CLAVES ÚNICAS
+// src/app/catalogo/[category]/page.tsx - COMPLETAMENTE OPTIMIZADO
 import fs from "fs";
 import path from "path";
 import { notFound } from "next/navigation";
@@ -17,33 +17,27 @@ interface Props {
   params: { category: string };
 }
 
-// server component
 export default async function CategoryPage({ params }: Props) {
   const { category } = params;
   
-  // check category exists in our manual list
   const catMeta = CATEGORIES.find((c) => c.slug === category);
   if (!catMeta) return notFound();
 
   const catPath = path.join(process.cwd(), "public", "catalogo", category);
   
-  // Check if directory exists - CON MANEJO DE ERRORES
   let files: string[] = [];
   try {
     if (!fs.existsSync(catPath) || !fs.statSync(catPath).isDirectory()) {
       return notFound();
     }
     
-    // read images and optional info.json
     const allFiles = fs.readdirSync(catPath).filter((f) => /\.(jpg|jpeg|png|webp)$/i.test(f));
-    // limit to 20 (as requested)
     files = allFiles.slice(0, 20);
   } catch (error) {
     console.error("Error reading directory:", error);
     return notFound();
   }
 
-  // try to read info.json for titles/descriptions if exists
   let infoMap: Record<string, { title?: string; description?: string }> = {};
   const infoPath = path.join(catPath, "info.json");
   
@@ -58,7 +52,6 @@ export default async function CategoryPage({ params }: Props) {
       }
     } catch (e) {
       console.error("Error reading info.json:", e);
-      // ignore parse issues but continue
     }
   }
 
@@ -69,23 +62,19 @@ export default async function CategoryPage({ params }: Props) {
     description: infoMap[f]?.description || "",
   }));
 
-  // ✅ OBTENER PRODUCTOS REALES DE LA CATEGORÍA
   const categoryProducts = PRODUCTS.filter(product => product.category === category);
 
-  // ✅ COMBINAR IMÁGENES CON DATOS REALES - CON CLAVES ÚNICAS
   const clientData = images.map((img, idx) => {
-    // Buscar producto real que coincida con la imagen
     const realProduct = categoryProducts.find(p => 
       p.images.some(image => image.includes(img.file.replace('.webp', '')))
     ) || categoryProducts[idx] || categoryProducts[0];
 
-    // ✅ GENERAR CLAVE ÚNICA para cada producto
     const uniqueId = realProduct?.id 
-      ? `${realProduct.id}-${idx}` // Si hay producto real, agregar índice para hacerlo único
-      : `${category}-${img.file}-${idx}`; // Si no, usar combinación única
+      ? `${realProduct.id}-${idx}`
+      : `${category}-${img.file}-${idx}`;
 
     return {
-      id: uniqueId, // ✅ CLAVE ÚNICA
+      id: uniqueId,
       image: img.src,
       file: img.file,
       title: img.title || realProduct?.name || `${catMeta.title} ${idx + 1}`,
@@ -96,16 +85,19 @@ export default async function CategoryPage({ params }: Props) {
     };
   });
 
-  // ✅ FILTRAR DUPLICADOS POR SEGURIDAD
   const uniqueClientData = clientData.filter((product, index, self) => 
     index === self.findIndex(p => p.id === product.id)
   );
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-6 md:py-8 px-3 sm:px-4">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">{catMeta.title}</h1>
-        {/* ProductGrid is a client component that receives a serializable array */}
+        {/* ✅ TÍTULO RESPONSIVE */}
+        <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white text-center sm:text-left">
+          {catMeta.title}
+        </h1>
+        
+        {/* ✅ PRODUCTGRID CON DATOS OPTIMIZADOS */}
         <ProductGrid products={uniqueClientData} />
       </div>
     </main>
