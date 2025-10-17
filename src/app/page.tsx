@@ -1,4 +1,4 @@
-// src/app/page.tsx - SLIDER MÁS COMPACTO
+// src/app/page.tsx - VERSIÓN QUE SÍ FUNCIONABA
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -48,19 +48,21 @@ export default function HomePage() {
     <div className="min-h-screen">
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
         
-        {/* ✅ SLIDER MÁS COMPACTO EN MÓVIL */}
-        <section className="relative w-full h-[100px] sm:h-[250px] md:h-[350px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600">
+        {/* ✅ SLIDER CON SEPARACIÓN MÍNIMA */}
+        <section className="relative w-full h-[100px] sm:h-[250px] md:h-[350px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 mt-1 sm:mt-2">
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" 
                style={{ transform: `translateX(-${current * 100}%)` }}>
             
             {SLIDES.map((slide, i) => (
-              <div key={slide.id} className="relative w-full h-full flex-shrink-0">
+              <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
                 
+                {/* ✅ IMAGEN SIN FILL - CON WIDTH/HEIGHT FIJO */}
                 <Image
                   src={getImageUrl(slide.id)}
                   alt={slide.title || `Slide ${slide.id}`}
-                  fill
-                  className="object-cover"
+                  width={800}
+                  height={300}
+                  className="object-contain w-full h-full"
                   priority={i < 2}
                   sizes="100vw"
                 />

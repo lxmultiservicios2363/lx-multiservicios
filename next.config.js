@@ -3,13 +3,21 @@ const nextConfig = {
   // CONFIGURACIÓN MÍNIMA - SIN TURBOPACK
   output: 'standalone',
   
+  // ✅ CONFIGURACIÓN ACTUALIZADA - SIN WARNINGS
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/**',
+      },
+    ],
   },
   
   // Desactivar completamente características experimentales
   experimental: {
-    // ELIMINADO: turbo: false (causaba error en Next.js 14)
+    // Configuración limpia sin turbo
   }
 }
 
