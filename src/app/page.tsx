@@ -1,11 +1,10 @@
-// src/app/page.tsx - CÓDIGO COMPLETO CON IMÁGENES MOBILE Y DESKTOP
+// src/app/page.tsx - CORREGIDO SIN WARNINGS
 "use client";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// ✅ SLIDERS CON LAS NUEVAS RUTAS CORRECTAS
 const SLIDES = [
   { 
     id: 1,
@@ -33,7 +32,6 @@ const SLIDES = [
   },
 ];
 
-// ✅ FUNCIÓN CORREGIDA CON RUTAS ACTUALES
 const getImageSrc = (slideId: number, format: string = 'webp', device: 'desktop' | 'mobile' = 'desktop') => {
   return `/sliders/slider${slideId}-${device}.${format}`;
 };
@@ -68,18 +66,17 @@ export default function HomePage() {
     <div className="min-h-screen">
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
         
-        {/* ✅ SLIDER CON IMÁGENES MOBILE Y DESKTOP */}
-        <section className="relative w-full h-[160px] xs:h-[180px] sm:h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-400 to-purple-500">
+        <section className="relative w-full overflow-hidden rounded-b-2xl shadow-xl bg-gray-100" 
+                 style={{ height: isMobile ? '160px' : '400px' }}>
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" style={{ transform: `translateX(-${current * 100}%)` }}>
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
-                {/* ✅ IMAGEN CON DETECCIÓN MOBILE/DESKTOP */}
+                {/* ✅ IMAGEN CORREGIDA - SIN WARNINGS */}
                 <Image 
                   src={getImageSrc(slide.id, 'webp', isMobile ? 'mobile' : 'desktop')}
                   alt={slide.title || `Slide ${slide.id}`}
-                  width={isMobile ? 600 : 1200}
-                  height={isMobile ? 300 : 400}
-                  className="object-contain max-w-full max-h-full"
+                  fill={true}
+                  className="object-cover"
                   priority={i === 0}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -91,23 +88,22 @@ export default function HomePage() {
                     else if (currentSrc.includes('.jpg')) {
                       target.src = getImageSrc(slide.id, 'png', isMobile ? 'mobile' : 'desktop');
                     }
-                    else {
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.classList.add('bg-gradient-to-br', 'from-blue-400', 'to-purple-500');
-                      }
-                    }
                   }}
                 />
                 
                 {slide.title && (
-                  <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white px-3 sm:px-4 text-center">
-                    <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold max-w-3xl leading-tight drop-shadow-md">
+                  <div className={`absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-3 ${
+                    isMobile ? 'px-2' : 'px-4'
+                  }`}>
+                    <h2 className={`font-bold max-w-3xl leading-tight drop-shadow-md ${
+                      isMobile ? 'text-sm' : 'text-xl md:text-2xl'
+                    }`}>
                       {slide.title}
                     </h2>
                     {slide.subtitle && (
-                      <p className="mt-1 sm:mt-2 text-xs xs:text-sm sm:text-base md:text-lg max-w-xl drop-shadow-md">
+                      <p className={`mt-1 max-w-xl drop-shadow-md ${
+                        isMobile ? 'text-xs mt-1' : 'text-sm md:text-base mt-2'
+                      }`}>
                         {slide.subtitle}
                       </p>
                     )}
@@ -117,27 +113,26 @@ export default function HomePage() {
             ))}
           </div>
           
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-1.5 z-10">
+          <div className={`absolute left-1/2 -translate-x-1/2 flex z-10 ${
+            isMobile ? 'bottom-2 gap-1' : 'bottom-3 gap-1.5'
+          }`}>
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 rounded-full transition-all border border-white/20 ${
-                  i === current 
-                    ? "bg-white scale-110" 
-                    : "bg-white/30 hover:bg-white/50"
-                }`}
+                className={`rounded-full transition-all border border-white/20 ${
+                  i === current ? "bg-white scale-110" : "bg-white/30 hover:bg-white/50"
+                } ${isMobile ? 'w-1.5 h-1.5' : 'w-2 h-2'}`}
               />
             ))}
           </div>
         </section>
 
-        {/* ✅ BOTÓN CATÁLOGO MEJORADO - MÁS VISIBLE */}
         <section className="max-w-4xl mx-auto px-3 sm:px-4 w-full">
           <div className="grid grid-cols-1 justify-items-center">
             <Link 
               href="/catalogo" 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 sm:py-3.5 px-8 sm:px-10 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-base sm:text-lg font-bold min-w-[160px] sm:min-w-[180px] text-center border-2 border-white/30 hover:scale-105 hover:shadow-xl"
+              className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-2.5 px-6 rounded-lg shadow-lg hover:from-blue-800 hover:to-purple-800 transition-all duration-300 text-sm font-bold min-w-[140px] text-center border border-white/20 hover:scale-105"
             >
               Ver Catálogo
             </Link>

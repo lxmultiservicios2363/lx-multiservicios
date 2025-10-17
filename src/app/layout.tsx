@@ -64,23 +64,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </a>
               </div>
 
-              {/* ✅ L & X CON TIPOGRAFÍA PROFESIONAL Y CLICK FUNCIONAL */}
+              {/* ✅ NOMBRE COMPLETO EN MÓVIL - CORREGIDO */}
               <Link href="/" className="ml-2">
-                <h1 className="text-lg sm:text-xl font-bold text-white drop-shadow-md hover:scale-105 transition-transform cursor-pointer font-serif tracking-tight">
-                  L & X <span className="hidden sm:inline">MULTISERVICIOS</span>
+                <h1 className="text-base sm:text-lg font-bold text-white drop-shadow-md hover:scale-105 transition-transform cursor-pointer font-serif tracking-tight">
+                  L & X <span className="xs:inline">MULTISERVICIOS</span>
                 </h1>
               </Link>
             </div>
 
-            <nav className="flex items-center gap-4 sm:gap-6">
-              <a href="/catalogo" className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
+            <nav className="flex items-center gap-3 sm:gap-6">
+              <a href="/catalogo" className="text-xs sm:text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
                 Catálogo
               </a>
               
               <div className="relative group">
-                <button className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105 flex items-center gap-1">
+                <button className="text-xs sm:text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105 flex items-center gap-1">
                   Contactos
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
 
-              <a href="/checkout" className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
+              <a href="/checkout" className="text-xs sm:text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
                 Checkout
               </a>
             </nav>
