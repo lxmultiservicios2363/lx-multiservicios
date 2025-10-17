@@ -1,6 +1,8 @@
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import WhatsAppChat from "@/components/WhatsAppChat";
+import { FaWhatsapp, FaFacebookF, FaInstagram, FaMapMarkerAlt } from "react-icons/fa";
+import Link from "next/link";
 
 export const metadata = {
   title: "L & X Multiservicios",
@@ -16,49 +18,110 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans antialiased h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
-        {/* Header Fijo - Optimizado */}
-        <header className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 z-50 py-3 shadow-sm">
-          <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
-              L & X <span className="hidden sm:inline">MULTISERVICIOS</span>
-            </h1>
-            <nav className="flex gap-3 sm:gap-6">
-              <a href="/catalogo" className="text-xs sm:text-sm hover:text-blue-600 transition font-medium">Catálogo</a>
-              <a href="/checkout" className="text-xs sm:text-sm hover:text-blue-600 transition font-medium">Checkout</a>
+      <body className="font-sans antialiased h-full bg-gradient-to-br from-blue-500/90 via-teal-400/90 to-cyan-300/90">
+        <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px] z-0"></div>
+        
+        <header className="fixed top-0 left-0 right-0 bg-gradient-to-r from-blue-700/95 via-teal-600/95 to-cyan-500/95 backdrop-blur-md z-50 py-3 shadow-lg border-b border-white/20">
+          <div className="max-w-7xl mx-auto px-4 flex justify-between items-center relative z-10">
+            
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <a 
+                  href="https://wa.me/593987384110" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg hover:shadow-green-500/25"
+                  title="WhatsApp"
+                >
+                  <FaWhatsapp size={14} />
+                </a>
+                <a 
+                  href="https://www.facebook.com/lxmultiserv/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg hover:shadow-blue-500/25"
+                  title="Síguenos en Facebook"
+                >
+                  <FaFacebookF size={14} />
+                </a>
+                <a 
+                  href="https://www.instagram.com/lxmultiservicios/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg hover:shadow-pink-500/25"
+                  title="Síguenos en Instagram"
+                >
+                  <FaInstagram size={14} />
+                </a>
+                <a 
+                  href="https://share.google/nTQQaNipCAEk6msVY" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg hover:shadow-red-500/25"
+                  title="Ubicación"
+                >
+                  <FaMapMarkerAlt size={14} />
+                </a>
+              </div>
+
+              {/* ✅ L & X CON TIPOGRAFÍA PROFESIONAL Y CLICK FUNCIONAL */}
+              <Link href="/" className="ml-2">
+                <h1 className="text-lg sm:text-xl font-bold text-white drop-shadow-md hover:scale-105 transition-transform cursor-pointer font-serif tracking-tight">
+                  L & X <span className="hidden sm:inline">MULTISERVICIOS</span>
+                </h1>
+              </Link>
+            </div>
+
+            <nav className="flex items-center gap-4 sm:gap-6">
+              <a href="/catalogo" className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
+                Catálogo
+              </a>
+              
+              <div className="relative group">
+                <button className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105 flex items-center gap-1">
+                  Contactos
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className="absolute top-full right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-white/20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-blue-600">📧</span>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">Email</p>
+                        <p className="text-xs text-gray-600">lxmultiservicios@gmail.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-blue-600">📞</span>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">Teléfono</p>
+                        <p className="text-xs text-gray-600">+593 98 738 4110</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="/checkout" className="text-sm font-medium text-white/95 hover:text-white transition-all duration-200 hover:scale-105">
+                Checkout
+              </a>
             </nav>
           </div>
         </header>
 
-        {/* Contenido Principal con espacio para header */}
-        <main className="pt-16 min-h-screen">
+        <main className="relative z-10 pt-20 min-h-screen">
           <Providers>{children}</Providers>
         </main>
 
-        {/* Footer Profesional */}
-        <footer className="bg-gray-800 text-white py-8">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Información de derechos */}
-              <div className="text-center md:text-left">
-                <h3 className="text-xl font-bold mb-2">L & X MULTISERVICIOS</h3>
-                <p className="text-sm opacity-80">
-                  © 2025 Todos los derechos reservados.
-                </p>
-              </div>
-              
-              {/* Información de contacto */}
-              <div className="text-center md:text-right">
-                <h4 className="font-semibold mb-3">Contáctanos</h4>
-                <div className="space-y-2">
-                  <p className="text-sm opacity-90">
-                    📧 Email: lxmultiservicios@gmail.com
-                  </p>
-                  <p className="text-sm opacity-90">
-                    📞 Teléfono: +593 98 738 4110
-                  </p>
-                </div>
-              </div>
+        <footer className="relative z-10 bg-gradient-to-r from-blue-800/95 via-teal-700/95 to-cyan-600/95 text-white py-8 backdrop-blur-sm border-t border-white/20">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-3 text-white font-serif tracking-tight">L & X MULTISERVICIOS</h3>
+              <p className="text-sm opacity-90">
+                © 2025 Todos los derechos reservados.
+              </p>
             </div>
           </div>
         </footer>

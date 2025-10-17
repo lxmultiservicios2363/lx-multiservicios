@@ -1,4 +1,4 @@
-// src/components/Header.tsx - DISEÑO MODERNO Y LLAMATIVO
+// src/components/Header.tsx - MANTIENE BOTONES, ELIMINA TEXTO
 "use client";
 
 import Link from "next/link";
@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <header className="w-full bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Left: redes + ubicación */}
+        {/* Left: redes + ubicación - SIN TEXTO */}
         <div className="flex items-center gap-3">
           <a
             href={whatsappLink}
@@ -55,20 +55,7 @@ export default function Header() {
             <FaMapMarkerAlt />
           </a>
 
-          {/* NOMBRE MODERNO Y LLAMATIVO */}
-          <Link 
-            href="/" 
-            className="ml-4 group"
-          >
-            <div className="flex flex-col">
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400 transition-all duration-300 group-hover:from-blue-700 group-hover:to-purple-700 dark:group-hover:from-blue-300 dark:group-hover:to-purple-300">
-                L & X
-              </span>
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wider uppercase">
-                Multiservicios
-              </span>
-            </div>
-          </Link>
+          {/* ✅ TEXTO "L & X MULTISERVICIOS" ELIMINADO */}
         </div>
 
         {/* Right: navegación */}

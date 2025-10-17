@@ -1,231 +1,97 @@
-// src/app/checkout/page.tsx - SIN PAYPAL
+// src/app/page.tsx - COMPLETAMENTE OPTIMIZADO
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useCart } from "../../components/CartContext";
-import { FaWhatsapp, FaCopy, FaCheck, FaQrcode } from "react-icons/fa";
+import Link from "next/link";
 
-const BANK_INFO = {
-  nombre: "Luis Enrique Reina Mesa",
-  banco: "Banco Guayaquil", 
-  tipo: "Cuenta de Ahorros",
-  numero: "0041529712",
-  email: "lxmultiservicios@gmail.com",
-  cedula: "1762373601",
-  telefono: "+593987384110"
-};
+const SLIDES = [
+  { src: "/slider1.png", title: "Suéteres Tejidos", subtitle: "Para Toda Ocasión" },
+  { src: "/slider2.png", title: "Busos | Sudaderas | Camisetas", subtitle: "Calidad y estilo para ti" },
+  { src: "/slider3.png", title: "Tazas, Cojines y Tomatodos", subtitle: "Obsequios para toda fecha y ocasión" },
+  { src: "/slider4.png", title: "", subtitle: "" },
+];
 
-// ✅ QR OFICIAL DEL BANCO GUAYAQUIL
-const BANK_QR_URL = "/images/qr.png";
+export default function HomePage() {
+  const [mounted, setMounted] = useState(false);
+  const [current, setCurrent] = useState(0);
 
-export default function CheckoutPage() {
-  const { items, total, clearCart } = useCart();
-  const [confirmed, setConfirmed] = useState(false);
-  const [copied, setCopied] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    if (!mounted) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % SLIDES.length), 4500);
+    return () => clearInterval(t);
+  }, [mounted]);
 
-  // Función para copiar datos bancarios
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // ✅ FUNCIÓN MEJORADA PARA WHATSAPP
-  const openWhatsApp = () => {
-    const productList = items.map(item => 
-      `• ${item.name} - ${item.quantity} x $${item.price}`
-    ).join('%0A');
-    
-    const message = `¡Hola! He realizado una transferencia bancaria.%0A%0A📦 *Mi Pedido:*%0A${productList}%0A%0A💰 *Monto Total:* $${total.toFixed(2)}%0A%0A📋 *Datos de la Transferencia:*%0A- Banco: ${BANK_INFO.banco}%0A- Cuenta: ${BANK_INFO.numero}%0A- Titular: ${BANK_INFO.nombre}%0A%0AAdjunto el comprobante de transferencia.`;
-    
-    window.open(`https://wa.me/${BANK_INFO.telefono}?text=${message}`, '_blank');
-  };
-
-  // ✅ FUNCIÓN PARA CONFIRMAR PAGO
-  const confirmPayment = () => {
-    if (confirm('¿Has realizado el pago y enviado el comprobante por WhatsApp?')) {
-      openWhatsApp(); // Abre WhatsApp para enviar comprobante
-      clearCart();
-      alert('¡Gracias por tu compra! Hemos registrado tu pedido. Por favor envía el comprobante por WhatsApp.');
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 3000);
-    }
-  };
-
-  if (!items || items.length === 0) {
-    return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-        <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm text-center border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Tu carrito está vacío</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">Agrega algunos productos para continuar con la compra</p>
-          <a 
-            href="/catalogo" 
-            className="inline-block bg-blue-600 dark:bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
-          >
-            Ir al Catálogo
-          </a>
-        </div>
-      </main>
-    );
-  }
+  if (!mounted) return <div className="min-h-screen" />;
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm mb-6 border border-gray-200 dark:border-gray-700">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">Finalizar Compra</h1>
-          <p className="text-gray-600 dark:text-gray-300">Revisa tu pedido y completa tu transferencia bancaria</p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Columna izquierda - Resumen del pedido */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Resumen del Pedido</h2>
-            
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.id} className="flex items-center gap-4 pb-4 border-b border-gray-100 dark:border-gray-700">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
-                    <Image
-                      src={item.image ?? "/images/placeholder.png"}
-                      alt={item.name}
-                      fill
-                      className="object-cover rounded-lg"
-                      sizes="80px"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base line-clamp-2">
-                      {item.name}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">Talla: {item.talla}</p>
-                    <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">Cantidad: {item.quantity}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</p>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">${item.price.toFixed(2)} c/u</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Total */}
-            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold text-gray-900 dark:text-white">Total:</span>
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Columna derecha - Transferencia Bancaria */}
-          <div className="space-y-6">
-            {/* Transferencia Bancaria */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Transferencia Bancaria</h3>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Banco:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.banco}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Tipo de cuenta:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.tipo}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Número de cuenta:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.numero}</span>
-                    <button
-                      onClick={() => copyToClipboard(BANK_INFO.numero)}
-                      className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                      title="Copiar número de cuenta"
-                    >
-                      {copied ? <FaCheck className="text-green-500" /> : <FaCopy />}
-                    </button>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Titular:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white text-right">{BANK_INFO.nombre}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Cédula:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.cedula}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Email:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.email}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300">Teléfono:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{BANK_INFO.telefono}</span>
+    <div className="min-h-screen">
+      {/* Grid Container Principal */}
+      <div className="grid grid-cols-1 gap-6 sm:gap-8">
+        
+        {/* Sección Slider */}
+        <section className="relative h-[40vh] sm:h-[50vh] md:h-[70vh] lg:h-[80vh] overflow-hidden rounded-b-3xl shadow-2xl">
+          <div className="flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+            {SLIDES.map((s, i) => (
+              <div key={i} className="relative w-full h-[40vh] sm:h-[50vh] md:h-[70vh] lg:h-[80vh] flex-shrink-0">
+                <Image 
+                  src={s.src} 
+                  alt={s.title || "slide"} 
+                  fill 
+                  className="object-cover"
+                  priority={i === 0}
+                  sizes="100vw"
+                />
+                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white px-3 sm:px-4 md:px-6 text-center">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold max-w-4xl leading-tight drop-shadow-lg">
+                    {s.title}
+                  </h2>
+                  <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-xl lg:text-2xl max-w-2xl drop-shadow-lg">
+                    {s.subtitle}
+                  </p>
                 </div>
               </div>
-
-              {!confirmed ? (
-                <button
-                  onClick={() => setConfirmed(true)}
-                  className="w-full bg-blue-600 dark:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors touch-target flex items-center justify-center gap-2"
-                >
-                  <FaQrcode size={20} />
-                  Mostrar QR Oficial del Banco
-                </button>
-              ) : (
-                <div className="space-y-4">
-                  {/* ✅ QR OFICIAL DEL BANCO */}
-                  <div className="text-center">
-                    <div className="relative mx-auto w-64 h-64 border-2 border-blue-500 dark:border-blue-400 rounded-lg p-2 bg-white dark:bg-gray-700">
-                      <Image
-                        src={BANK_QR_URL}
-                        alt="QR Oficial del Banco Guayaquil para transferencias"
-                        fill
-                        className="object-contain"
-                        sizes="256px"
-                      />
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-3">
-                      <strong>QR Oficial de Banco Guayaquil</strong>
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Escanea con tu app bancaria para transferir <strong>${total.toFixed(2)}</strong>
-                    </p>
-                  </div>
-
-                  {/* Acciones después del pago */}
-                  <div className="space-y-3">
-                    <button
-                      onClick={openWhatsApp}
-                      className="w-full bg-green-500 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 touch-target"
-                    >
-                      <FaWhatsapp size={20} />
-                      Enviar comprobante por WhatsApp
-                    </button>
-                    
-                    <button
-                      onClick={confirmPayment}
-                      className="w-full bg-blue-600 dark:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors touch-target"
-                    >
-                      ✅ Ya realicé el pago
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* ✅ SECCIÓN ELIMINADA: PayPal Demo */}
-            {/* La sección de PayPal ha sido completamente removida */}
+            ))}
           </div>
-        </div>
+          
+          {/* Pagination dots */}
+          <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 rounded-full transition-all ${
+                  i === current 
+                    ? "bg-white scale-125" 
+                    : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Sección Botón Catálogo */}
+        <section className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 w-full">
+          <div className="grid grid-cols-1 justify-items-center">
+            <Link 
+              href="/catalogo" 
+              className="bg-white/20 backdrop-blur-md text-white py-3 sm:py-4 px-6 sm:px-8 rounded-2xl shadow-2xl hover:bg-white/30 transition-all duration-300 text-base sm:text-lg font-bold min-w-[180px] sm:min-w-[200px] text-center border border-white/30 hover:scale-105 hover:shadow-3xl"
+            >
+              Ver Catálogo
+            </Link>
+          </div>
+        </section>
+
+        {/* Espacio para futuras secciones */}
+        <section className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8 py-8 sm:py-10 md:py-12">
+            {/* Aquí puedes agregar más secciones con grid responsive */}
+          </div>
+        </section>
+
       </div>
-    </main>
+    </div>
   );
 }
