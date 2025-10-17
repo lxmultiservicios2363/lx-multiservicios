@@ -1,4 +1,4 @@
-// src/app/page.tsx - COMPLETAMENTE RESPONSIVE
+// src/app/page.tsx - CORREGIDO CON SLIDER OPTIMIZADO PARA MÓVIL
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -68,18 +68,18 @@ export default function HomePage() {
     <div className="min-h-screen">
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
         
-        {/* ✅ SLIDER COMPLETAMENTE RESPONSIVE */}
-        <section className="relative w-full h-[250px] xs:h-[280px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden rounded-b-2xl shadow-xl bg-gray-100">
+        {/* ✅ SLIDER CORREGIDO - ALTURAS OPTIMIZADAS PARA MÓVIL */}
+        <section className="relative w-full h-[160px] xs:h-[180px] sm:h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden rounded-b-2xl shadow-xl bg-gray-100">
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" style={{ transform: `translateX(-${current * 100}%)` }}>
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
-                {/* ✅ IMAGEN RESPONSIVE PARA TODOS LOS DISPOSITIVOS */}
+                {/* ✅ IMAGEN CON OBJECT-CONTAIN PARA VER COMPLETAS */}
                 <Image 
                   src={getImageSrc(slide.id, 'webp', isMobile ? 'mobile' : 'desktop')}
                   alt={slide.title || `Slide ${slide.id}`}
                   width={1200}
                   height={400}
-                  className="object-contain w-full h-full"
+                  className="object-contain max-w-full max-h-full"
                   priority={i === 0}
                   unoptimized={true}
                   onError={(e) => {
