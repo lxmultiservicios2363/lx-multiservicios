@@ -1,4 +1,4 @@
-// src/app/page.tsx - VERSIÓN FINAL OPTIMIZADA
+// src/app/page.tsx - SLIDER MÁS COMPACTO
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -48,7 +48,8 @@ export default function HomePage() {
     <div className="min-h-screen">
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
         
-        <section className="relative w-full h-[140px] sm:h-[300px] md:h-[400px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600">
+        {/* ✅ SLIDER MÁS COMPACTO EN MÓVIL */}
+        <section className="relative w-full h-[100px] sm:h-[250px] md:h-[350px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600">
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" 
                style={{ transform: `translateX(-${current * 100}%)` }}>
             
@@ -60,18 +61,18 @@ export default function HomePage() {
                   alt={slide.title || `Slide ${slide.id}`}
                   fill
                   className="object-cover"
-                  priority={i < 2} // ✅ OPTIMIZACIÓN: primeras 2 imágenes prioritarias
+                  priority={i < 2}
                   sizes="100vw"
                 />
                 
                 <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-4">
                   {slide.title && (
-                    <h2 className="text-lg sm:text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg">
+                    <h2 className="text-sm sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 drop-shadow-lg">
                       {slide.title}
                     </h2>
                   )}
                   {slide.subtitle && (
-                    <p className="text-sm sm:text-base md:text-lg drop-shadow-lg opacity-90">
+                    <p className="text-xs sm:text-sm md:text-base drop-shadow-lg opacity-90">
                       {slide.subtitle}
                     </p>
                   )}
@@ -80,12 +81,12 @@ export default function HomePage() {
             ))}
           </div>
           
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-2 z-10">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all ${
                   i === current ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
                 }`}
               />
