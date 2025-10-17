@@ -1,4 +1,4 @@
-// src/app/page.tsx - CORREGIDO CON SLIDER OPTIMIZADO PARA MÓVIL
+// src/app/page.tsx - CÓDIGO COMPLETO CON IMÁGENES MOBILE Y DESKTOP
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -68,20 +68,19 @@ export default function HomePage() {
     <div className="min-h-screen">
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
         
-        {/* ✅ SLIDER CORREGIDO - ALTURAS OPTIMIZADAS PARA MÓVIL */}
-        <section className="relative w-full h-[160px] xs:h-[180px] sm:h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden rounded-b-2xl shadow-xl bg-gray-100">
+        {/* ✅ SLIDER CON IMÁGENES MOBILE Y DESKTOP */}
+        <section className="relative w-full h-[160px] xs:h-[180px] sm:h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-400 to-purple-500">
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" style={{ transform: `translateX(-${current * 100}%)` }}>
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
-                {/* ✅ IMAGEN CON OBJECT-CONTAIN PARA VER COMPLETAS */}
+                {/* ✅ IMAGEN CON DETECCIÓN MOBILE/DESKTOP */}
                 <Image 
                   src={getImageSrc(slide.id, 'webp', isMobile ? 'mobile' : 'desktop')}
                   alt={slide.title || `Slide ${slide.id}`}
-                  width={1200}
-                  height={400}
+                  width={isMobile ? 600 : 1200}
+                  height={isMobile ? 300 : 400}
                   className="object-contain max-w-full max-h-full"
                   priority={i === 0}
-                  unoptimized={true}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     const currentSrc = target.src;
@@ -103,7 +102,7 @@ export default function HomePage() {
                 />
                 
                 {slide.title && (
-                  <div className="absolute inset-0 bg-black/25 flex flex-col items-center justify-center text-white px-3 sm:px-4 text-center">
+                  <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white px-3 sm:px-4 text-center">
                     <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold max-w-3xl leading-tight drop-shadow-md">
                       {slide.title}
                     </h2>
@@ -133,12 +132,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Sección Botón Catálogo */}
+        {/* ✅ BOTÓN CATÁLOGO MEJORADO - MÁS VISIBLE */}
         <section className="max-w-4xl mx-auto px-3 sm:px-4 w-full">
           <div className="grid grid-cols-1 justify-items-center">
             <Link 
               href="/catalogo" 
-              className="bg-white/20 backdrop-blur-md text-white py-2 sm:py-2.5 px-5 sm:px-6 rounded-xl shadow-lg hover:bg-white/30 transition-all duration-300 text-sm sm:text-base font-semibold min-w-[140px] sm:min-w-[160px] text-center border border-white/25 hover:scale-105"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 sm:py-3.5 px-8 sm:px-10 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-base sm:text-lg font-bold min-w-[160px] sm:min-w-[180px] text-center border-2 border-white/30 hover:scale-105 hover:shadow-xl"
             >
               Ver Catálogo
             </Link>
