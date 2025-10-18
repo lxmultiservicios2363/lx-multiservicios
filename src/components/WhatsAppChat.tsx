@@ -1,4 +1,4 @@
-// src/components/WhatsAppChat.tsx - VERSIÓN CON MENSAJES COMPLETOS
+// src/components/WhatsAppChat.tsx - POSICIÓN ABSOLUTA GLOBAL
 "use client";
 
 import React, { useState } from "react";
@@ -9,25 +9,24 @@ const WHATSAPP_NUMBER = "593987384110";
 export default function WhatsAppChat() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Función para abrir WhatsApp con mensajes que WhatsApp Business puede detectar
   const openWhatsApp = (optionType: string) => {
     let message = "";
     
     switch(optionType) {
       case "productos":
-        message = `productos`; // Palabra clave que WhatsApp Business puede detectar
+        message = `productos`;
         break;
       case "envios":
-        message = `envios`; // Palabra clave
+        message = `envios`;
         break;
       case "pagos":
-        message = `pagos`; // Palabra clave  
+        message = `pagos`;
         break;
       case "horarios":
-        message = `horarios`; // Palabra clave
+        message = `horarios`;
         break;
       default:
-        message = `Hola, necesito atención personalizada`; // Mensaje para atención directa
+        message = `Hola, necesito atención personalizada`;
     }
 
     const encodedMessage = encodeURIComponent(message);
@@ -36,34 +35,55 @@ export default function WhatsAppChat() {
   };
 
   return (
-    <>
-      {/* Botón flotante de WhatsApp */}
+    <div style={{ position: 'fixed', zIndex: 9999 }}>
+      {/* ✅ BOTÓN CON POSICIÓN ABSOLUTA GLOBAL */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed left-4 bottom-4 z-40 bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 touch-target group"
+        className="fixed left-4 bottom-4 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 touch-target group border-2 border-white"
         aria-label="Chat de WhatsApp"
+        style={{
+          position: 'fixed',
+          zIndex: 10000,
+          left: '1rem',
+          bottom: '1rem'
+        }}
       >
         <FaWhatsapp size={24} />
-        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow animate-pulse">
+        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg animate-pulse border border-white">
           !
         </div>
+        <div className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-20"></div>
       </button>
 
-      {/* Overlay */}
+      {/* ✅ OVERLAY CON POSICIÓN ABSOLUTA GLOBAL */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-40 animate-fade-in"
+          className="fixed inset-0 bg-black/50 animate-fade-in"
           onClick={() => setIsOpen(false)}
+          style={{
+            position: 'fixed',
+            zIndex: 9998,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+          }}
         />
       )}
 
-      {/* Panel de Chat */}
+      {/* ✅ PANEL CON POSICIÓN ABSOLUTA GLOBAL */}
       <div
-        className={`fixed left-4 bottom-20 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 transform transition-all duration-300 z-50 flex flex-col ${
+        className={`fixed left-4 bottom-20 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 transform transition-all duration-300 flex flex-col ${
           isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
         }`}
+        style={{
+          position: 'fixed',
+          zIndex: 10000,
+          left: '1rem',
+          bottom: '5rem'
+        }}
       >
-        {/* Header del Chat */}
+        {/* ... (contenido igual) */}
         <div className="p-4 bg-green-500 text-white rounded-t-2xl flex items-center gap-3">
           <div className="relative">
             <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
@@ -83,7 +103,6 @@ export default function WhatsAppChat() {
           </button>
         </div>
 
-        {/* Mensaje Informativo */}
         <div className="p-4 border-b border-gray-100 dark:border-gray-700">
           <div className="bg-blue-50 dark:bg-blue-900/30 rounded-2xl p-4">
             <p className="text-gray-700 dark:text-gray-200 text-sm text-center">
@@ -92,7 +111,6 @@ export default function WhatsAppChat() {
           </div>
         </div>
 
-        {/* Opciones Rápidas */}
         <div className="p-4 space-y-3">
           <button
             onClick={() => openWhatsApp("productos")}
@@ -147,13 +165,12 @@ export default function WhatsAppChat() {
           </button>
         </div>
 
-        {/* Footer */}
         <div className="p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-2xl">
           <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             Recibirás respuesta automática al instante
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

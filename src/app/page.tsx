@@ -1,4 +1,4 @@
-// src/app/page.tsx - VERSIÓN QUE SÍ FUNCIONABA
+// src/app/page.tsx - VERSIÓN CORREGIDA PARA NUEVO LAYOUT
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -45,36 +45,36 @@ export default function HomePage() {
   if (!mounted) return <div className="min-h-screen" />;
 
   return (
-    <div className="min-h-screen">
-      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
+    <div className="min-h-screen pt-8"> {/* ✅ AGREGADO pt-8 para separación del header */}
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 max-w-7xl mx-auto px-4"> {/* ✅ AGREGADO max-w-7xl mx-auto px-4 */}
         
-        {/* ✅ SLIDER CON SEPARACIÓN MÍNIMA */}
-        <section className="relative w-full h-[100px] sm:h-[250px] md:h-[350px] overflow-hidden rounded-b-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 mt-1 sm:mt-2">
+        {/* ✅ SLIDER CORREGIDO */}
+        <section className="relative w-full h-[150px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 mt-4"> {/* ✅ AJUSTADO heights y mt-4 */}
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" 
                style={{ transform: `translateX(-${current * 100}%)` }}>
             
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
                 
-                {/* ✅ IMAGEN SIN FILL - CON WIDTH/HEIGHT FIJO */}
+                {/* ✅ IMAGEN OPTIMIZADA */}
                 <Image
                   src={getImageUrl(slide.id)}
                   alt={slide.title || `Slide ${slide.id}`}
-                  width={800}
-                  height={300}
-                  className="object-contain w-full h-full"
+                  width={1200}
+                  height={600}
+                  className="object-cover w-full h-full"
                   priority={i < 2}
-                  sizes="100vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
                 />
                 
-                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-4">
+                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white text-center px-4">
                   {slide.title && (
-                    <h2 className="text-sm sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 drop-shadow-lg">
+                    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
                       {slide.title}
                     </h2>
                   )}
                   {slide.subtitle && (
-                    <p className="text-xs sm:text-sm md:text-base drop-shadow-lg opacity-90">
+                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl drop-shadow-lg opacity-90 font-light">
                       {slide.subtitle}
                     </p>
                   )}
@@ -83,24 +83,26 @@ export default function HomePage() {
             ))}
           </div>
           
-          <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-2 z-10">
+          {/* ✅ BOTONES INDICADORES MÁS VISIBLES */}
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-10">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all ${
-                  i === current ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all ${
+                  i === current ? "bg-white scale-110 shadow-lg" : "bg-white/60 hover:bg-white/80"
                 }`}
               />
             ))}
           </div>
         </section>
 
-        <section className="max-w-4xl mx-auto px-3 sm:px-4 w-full">
+        {/* ✅ SECCIÓN BOTÓN CENTRADA */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 w-full py-6 sm:py-8"> {/* ✅ AGREGADO padding vertical */}
           <div className="grid grid-cols-1 justify-items-center">
             <Link 
               href="/catalogo" 
-              className="bg-gradient-to-r from-blue-700 to-purple-700 text-white py-2.5 px-6 rounded-lg shadow-lg hover:from-blue-800 hover:to-purple-800 transition-all duration-300 text-sm font-bold min-w-[140px] text-center border border-white/20 hover:scale-105"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-base sm:text-lg font-bold min-w-[160px] text-center border border-white/20 hover:scale-105 transform hover:shadow-xl"
             >
               Ver Catálogo
             </Link>

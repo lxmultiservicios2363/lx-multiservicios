@@ -1,14 +1,20 @@
-// src/components/CartSidebar.tsx - ICONO SÓLIDO, MENÚ MÁS TRANSPARENTE
+// src/components/CartSidebar.tsx - CON PORTAL
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaShoppingCart, FaTimes, FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import Link from "next/link";
 import { useCart } from "./CartContext";
+import { createPortal } from "react-dom";
 
 export default function CartSidebar() {
   const { items, removeItem, updateQuantity, total, clearCart } = useCart();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Función para incrementar cantidad
   const incrementQuantity = (id: string, currentQuantity: number) => {
@@ -25,33 +31,20 @@ export default function CartSidebar() {
   // Calcular total de items
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
+  // Contenido del carrito para el Portal
+  const cartContent = (
     <>
-      {/* Floating cart button - COLOR AZUL SÓLIDO ORIGINAL */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed right-4 bottom-4 z-40 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 touch-target"
-        aria-label={`Abrir carrito (${totalItems} productos)`}
-      >
-        <FaShoppingCart size={22} />
-        {totalItems > 0 && (
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow">
-            {totalItems}
-          </span>
-        )}
-      </button>
-
       {/* Overlay con transparencia suave */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/10 z-40 animate-fade-in"
+          className="fixed inset-0 bg-black/10 z-[9998] animate-fade-in"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* Sidebar con MÁS TRANSPARENCIA y MENOS BLUR */}
+      {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm border-l border-gray-200/30 dark:border-gray-700/30 shadow-xl transform transition-transform duration-300 z-50 flex flex-col ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm border-l border-gray-200/30 dark:border-gray-700/30 shadow-xl transform transition-transform duration-300 z-[9999] flex flex-col ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -191,6 +184,27 @@ export default function CartSidebar() {
           </div>
         )}
       </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Floating cart button */}
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed right-4 bottom-4 z-[9999] bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 touch-target"
+        aria-label={`Abrir carrito (${totalItems} productos)`}
+      >
+        <FaShoppingCart size={22} />
+        {totalItems > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow">
+            {totalItems}
+          </span>
+        )}
+      </button>
+
+      {/* Usar Portal para el contenido del carrito */}
+      {mounted && createPortal(cartContent, document.body)}
     </>
   );
 }

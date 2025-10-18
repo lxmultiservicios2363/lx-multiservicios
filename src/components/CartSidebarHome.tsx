@@ -11,10 +11,10 @@ export default function CartSidebarHome() {
 
   return (
     <>
-      {/* Botón flotante */}
+      {/* Botón flotante - Z-INDEX MÁXIMO */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed right-4 bottom-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:scale-105 transition"
+        className="fixed right-4 bottom-4 z-[9999] bg-blue-600 text-white p-3 rounded-full shadow-lg hover:scale-105 transition"
         aria-label="Abrir carrito"
       >
         <FaShoppingCart size={20} />
@@ -25,17 +25,17 @@ export default function CartSidebarHome() {
         )}
       </button>
 
-      {/* Fondo blur */}
+      {/* Fondo blur - Z-INDEX MÁXIMO */}
       <div
-        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-40 transition-opacity ${
+        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-[9998] transition-opacity ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={() => setOpen(false)}
       />
 
-      {/* Sidebar */}
+      {/* Sidebar - Z-INDEX MÁXIMO */}
       <div
-        className={`fixed top-0 right-0 h-full w-96 bg-white shadow-xl transform transition-transform z-50 ${
+        className={`fixed top-0 right-0 h-full w-96 bg-white shadow-xl transform transition-transform z-[9999] ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
