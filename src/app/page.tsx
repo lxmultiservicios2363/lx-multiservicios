@@ -1,4 +1,4 @@
-// src/app/page.tsx - VERSIÓN CORREGIDA PARA NUEVO LAYOUT
+// src/app/page.tsx - ACTUALIZADO CON NUEVOS COLORES
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -36,27 +36,32 @@ export default function HomePage() {
     setMounted(true);
     const t = setInterval(() => setCurrent((c) => (c + 1) % SLIDES.length), 4500);
     return () => clearInterval(t);
-  }, [mounted]);
+  }, []);
 
   const getImageUrl = (slideId: number) => {
     return `/sliders/slider${slideId}-desktop.webp`;
   };
 
-  if (!mounted) return <div className="min-h-screen" />;
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse">Cargando...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen pt-8"> {/* ✅ AGREGADO pt-8 para separación del header */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 max-w-7xl mx-auto px-4"> {/* ✅ AGREGADO max-w-7xl mx-auto px-4 */}
+    <div className="min-h-screen">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 max-w-7xl mx-auto px-4">
         
-        {/* ✅ SLIDER CORREGIDO */}
-        <section className="relative w-full h-[150px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-2xl shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 mt-4"> {/* ✅ AJUSTADO heights y mt-4 */}
+        {/* SLIDER CON NUEVOS COLORES */}
+        <section className="relative w-full h-[180px] sm:h-[300px] md:h-[420px] lg:h-[520px] overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 mt-6">
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" 
                style={{ transform: `translateX(-${current * 100}%)` }}>
             
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
                 
-                {/* ✅ IMAGEN OPTIMIZADA */}
                 <Image
                   src={getImageUrl(slide.id)}
                   alt={slide.title || `Slide ${slide.id}`}
@@ -67,14 +72,14 @@ export default function HomePage() {
                   sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
                 />
                 
-                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white text-center px-4">
+                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-4">
                   {slide.title && (
-                    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 drop-shadow-lg">
+                    <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 drop-shadow-2xl bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
                       {slide.title}
                     </h2>
                   )}
                   {slide.subtitle && (
-                    <p className="text-sm sm:text-lg md:text-xl lg:text-2xl drop-shadow-lg opacity-90 font-light">
+                    <p className="text-base sm:text-xl md:text-2xl lg:text-3xl drop-shadow-2xl opacity-95 font-light max-w-2xl">
                       {slide.subtitle}
                     </p>
                   )}
@@ -83,26 +88,28 @@ export default function HomePage() {
             ))}
           </div>
           
-          {/* ✅ BOTONES INDICADORES MÁS VISIBLES */}
-          <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-10">
+          {/* BOTONES INDICADORES MEJORADOS */}
+          <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex gap-3 sm:gap-4 z-10">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all ${
-                  i === current ? "bg-white scale-110 shadow-lg" : "bg-white/60 hover:bg-white/80"
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-all duration-300 ${
+                  i === current 
+                    ? "bg-white scale-125 shadow-2xl shadow-white/50" 
+                    : "bg-white/50 hover:bg-white/80 hover:scale-110"
                 }`}
               />
             ))}
           </div>
         </section>
 
-        {/* ✅ SECCIÓN BOTÓN CENTRADA */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 w-full py-6 sm:py-8"> {/* ✅ AGREGADO padding vertical */}
+        {/* BOTÓN CON NUEVO DEGRADADO */}
+        <section className="max-w-4xl mx-auto px-4 w-full py-8 sm:py-12">
           <div className="grid grid-cols-1 justify-items-center">
             <Link 
               href="/catalogo" 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-base sm:text-lg font-bold min-w-[160px] text-center border border-white/20 hover:scale-105 transform hover:shadow-xl"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-12 rounded-2xl shadow-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 text-lg sm:text-xl font-bold min-w-[200px] text-center border-2 border-white/30 hover:scale-105 transform hover:shadow-purple-500/40 hover:border-white/50"
             >
               Ver Catálogo
             </Link>
