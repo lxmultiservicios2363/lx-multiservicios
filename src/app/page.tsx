@@ -1,4 +1,4 @@
-// src/app/page.tsx - ACTUALIZADO CON NUEVOS COLORES
+// src/app/page.tsx - SLIDER PROPORCIONAL Y COMPLETO
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -44,72 +44,140 @@ export default function HomePage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse">Cargando...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600/10 via-pink-500/10 to-orange-400/10">
+        <div className="animate-pulse text-lg text-gray-600">Cargando...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="grid grid-cols-1 gap-6 sm:gap-8 max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-600/5 via-pink-500/5 to-orange-400/5">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 max-w-7xl mx-auto px-4 sm:px-6">
         
-        {/* SLIDER CON NUEVOS COLORES */}
-        <section className="relative w-full h-[180px] sm:h-[300px] md:h-[420px] lg:h-[520px] overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 mt-6">
+        {/* SLIDER PROPORCIONAL - IMÁGENES COMPLETAS */}
+        <section className="relative w-full 
+          h-[40vh]  /* Altura proporcional para móvil */
+          min-h-[250px] /* Mínimo para que se vea bien */
+          sm:h-[45vh] /* Tablet pequeña */
+          md:h-[50vh] /* Tablet */
+          lg:h-[55vh] /* Laptop */
+          xl:h-[60vh] /* Desktop */
+          max-h-[500px] /* Límite máximo */
+          overflow-hidden rounded-xl sm:rounded-2xl shadow-xl 
+          bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 
+          mt-4 sm:mt-6 mx-auto"
+        >
           <div className="flex transition-transform duration-1000 ease-in-out w-full h-full" 
                style={{ transform: `translateX(-${current * 100}%)` }}>
             
             {SLIDES.map((slide, i) => (
-              <div key={slide.id} className="relative w-full h-full flex-shrink-0 flex items-center justify-center">
+              <div key={slide.id} className="relative w-full h-full flex-shrink-0">
                 
-                <Image
-                  src={getImageUrl(slide.id)}
-                  alt={slide.title || `Slide ${slide.id}`}
-                  width={1200}
-                  height={600}
-                  className="object-cover w-full h-full"
-                  priority={i < 2}
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
-                />
-                
-                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-4">
-                  {slide.title && (
-                    <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 drop-shadow-2xl bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
-                      {slide.title}
-                    </h2>
-                  )}
-                  {slide.subtitle && (
-                    <p className="text-base sm:text-xl md:text-2xl lg:text-3xl drop-shadow-2xl opacity-95 font-light max-w-2xl">
-                      {slide.subtitle}
-                    </p>
-                  )}
+                {/* CONTENEDOR DE IMAGEN CON OBJECT-CONTAIN PARA VER IMAGEN COMPLETA */}
+                <div className="relative w-full h-full flex items-center justify-center bg-gray-100">
+                  <Image
+                    src={getImageUrl(slide.id)}
+                    alt={slide.title || `Slide ${slide.id}`}
+                    width={800}
+                    height={400}
+                    className="object-contain w-auto h-auto max-w-full max-h-full"
+                    priority={i < 2}
+                    sizes="(max-width: 640px) 90vw, (max-width: 768px) 85vw, (max-width: 1024px) 80vw, 75vw"
+                    quality={85}
+                  />
                 </div>
+                
+                {/* OVERLAY DE CONTENIDO MEJORADO */}
+                {(slide.title || slide.subtitle) && (
+                  <div className="absolute inset-0 bg-black/25 flex flex-col items-center justify-center text-white text-center px-4 sm:px-6 z-10">
+                    {slide.title && (
+                      <h2 className="
+                        text-lg /* Móvil */
+                        sm:text-xl /* Móvil grande */
+                        md:text-2xl /* Tablet */
+                        lg:text-3xl /* Laptop */
+                        font-bold mb-2 sm:mb-3 
+                        drop-shadow-2xl 
+                        bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent 
+                        leading-tight px-2
+                      ">
+                        {slide.title}
+                      </h2>
+                    )}
+                    {slide.subtitle && (
+                      <p className="
+                        text-xs /* Móvil */
+                        sm:text-sm /* Móvil grande */
+                        md:text-base /* Tablet */
+                        lg:text-lg /* Laptop */
+                        drop-shadow-2xl opacity-95 font-light 
+                        max-w-xs /* Móvil */
+                        sm:max-w-sm /* Móvil grande */
+                        md:max-w-md /* Tablet */
+                        leading-relaxed px-2
+                      ">
+                        {slide.subtitle}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
           
-          {/* BOTONES INDICADORES MEJORADOS */}
-          <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex gap-3 sm:gap-4 z-10">
+          {/* BOTONES INDICADORES MÁS DISCRETOS */}
+          <div className="absolute 
+            bottom-3 /* Móvil */
+            sm:bottom-4 /* Tablet */
+            left-1/2 -translate-x-1/2 
+            flex gap-2 z-20"
+          >
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-all duration-300 ${
-                  i === current 
-                    ? "bg-white scale-125 shadow-2xl shadow-white/50" 
-                    : "bg-white/50 hover:bg-white/80 hover:scale-110"
-                }`}
+                className={`
+                  w-2 h-2 /* Móvil */
+                  sm:w-2.5 sm:h-2.5 /* Tablet */
+                  rounded-full transition-all duration-300 
+                  ${i === current 
+                    ? "bg-white scale-110 shadow-lg shadow-white/40" 
+                    : "bg-white/40 hover:bg-white/60 hover:scale-105"
+                  }
+                `}
               />
             ))}
           </div>
         </section>
 
-        {/* BOTÓN CON NUEVO DEGRADADO */}
-        <section className="max-w-4xl mx-auto px-4 w-full py-8 sm:py-12">
+        {/* BOTÓN CATÁLOGO MÁS COMPACTO */}
+        <section className="max-w-2xl mx-auto w-full py-6 sm:py-8 px-4">
           <div className="grid grid-cols-1 justify-items-center">
             <Link 
               href="/catalogo" 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-12 rounded-2xl shadow-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 text-lg sm:text-xl font-bold min-w-[200px] text-center border-2 border-white/30 hover:scale-105 transform hover:shadow-purple-500/40 hover:border-white/50"
+              className="
+                bg-gradient-to-r from-purple-600 to-pink-600 
+                text-white 
+                py-3 /* Móvil */
+                sm:py-3 /* Tablet+ */
+                px-8 /* Móvil */
+                sm:px-10 /* Tablet+ */
+                rounded-lg /* Móvil */
+                sm:rounded-xl /* Tablet+ */
+                shadow-lg 
+                hover:from-purple-700 hover:to-pink-700 
+                transition-all duration-300 
+                text-base /* Móvil */
+                sm:text-lg /* Tablet+ */
+                font-bold 
+                min-w-[150px] /* Móvil */
+                text-center 
+                border-2 border-white/30 
+                hover:scale-105 transform 
+                hover:shadow-purple-500/30 
+                hover:border-white/50
+                active:scale-95
+              "
             >
               Ver Catálogo
             </Link>
