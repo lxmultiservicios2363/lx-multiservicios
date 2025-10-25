@@ -1,34 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findResponse } from '@/lib/chatbot-responses';
 
-// VERIFICACIÓN DEL WEBHOOK (GET) - CON DEBUG MEJORADO
+// VERIFICACIÓN DEL WEBHOOK (GET) - CON TOKEN FIJO
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const mode = searchParams.get('hub.mode');
   const token = searchParams.get('hub.verify_token');
   const challenge = searchParams.get('hub.challenge');
 
-  console.log('🎯 === DEBUG COMPLETO ===');
+  console.log('🎯 === VERIFICACIÓN WEBHOOK ===');
   console.log('🔹 Mode:', mode);
-  console.log('🔹 Token recibido:', `"${token}"`);
-  console.log('🔹 Token esperado:', `"${process.env.WHATSAPP_VERIFY_TOKEN}"`);
+  console.log('🔹 Token recibido:', token);
   console.log('🔹 Challenge:', challenge);
-  console.log('🔹 ¿Coinciden EXACTAMENTE?:', token === process.env.WHATSAPP_VERIFY_TOKEN);
-  console.log('🔹 Longitud token recibido:', token?.length);
-  console.log('🔹 Longitud token esperado:', process.env.WHATSAPP_VERIFY_TOKEN?.length);
   
-  // VERIFICACIÓN FORZADA TEMPORAL
-  if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
-    console.log('🎉 ✅ VERIFICACIÓN EXITOSA');
+  // ✅ VERIFICACIÓN FORZADA - TOKEN FIJO
+  const expectedToken = 'lx_multiservicios_2024_token';
+  
+  if (mode === 'subscribe' && token === expectedToken) {
+    console.log('🎉 ✅ WEBHOOK VERIFICADO EXITOSAMENTE!');
     return new NextResponse(challenge, { status: 200 });
-  } else {
-    console.log('❌ FALLA - Razón:');
-    console.log('   - Mode correcto?:', mode === 'subscribe');
-    console.log('   - Token correcto?:', token === process.env.WHATSAPP_VERIFY_TOKEN);
-    console.log('   - Token recibido:', token);
-    console.log('   - Token esperado:', process.env.WHATSAPP_VERIFY_TOKEN);
   }
 
+  console.log('❌ FALLA EN VERIFICACIÓN');
+  console.log('🔹 Razón:', token === expectedToken ? 'Mode incorrecto' : 'Tokens diferentes');
+  console.log('🔹 Token recibido:', token);
+  console.log('🔹 Token esperado:', expectedToken);
+  
   return new NextResponse('Verification failed', { status: 403 });
 }
 
@@ -127,7 +124,7 @@ async function handleInteractiveMessage(phone: string, message: any) {
 }
 
 // =============================================
-// 🚀 FUNCIÓN PARA ENVIAR MENSAJES (MANTENIENDO TU LÓGICA)
+// 🚀 FUNCIÓN PARA ENVIAR MENSAJES
 // =============================================
 
 async function sendMessage(phone: string, text: string) {
