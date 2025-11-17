@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { findResponse } from '@/lib/chatbot-responses';
+import { findResponse, KEYWORDS } from '@/lib/chatbot-responses';
 
 // VERIFICACIÓN DEL WEBHOOK (GET) - CON TOKEN FIJO
 export async function GET(request: NextRequest) {
@@ -82,7 +82,6 @@ async function processMessage(message: any) {
       await handleInteractiveMessage(userPhone, message);
       break;
     default:
-      // Usar respuesta por defecto de TU chatbot
       console.log('🔍 Usando respuesta por defecto del chatbot');
       const defaultResponse = findResponse('');
       await sendMessage(userPhone, defaultResponse.message);
@@ -93,13 +92,21 @@ async function processMessage(message: any) {
 async function handleTextMessage(phone: string, text: string) {
   console.log(`🔍 Buscando respuesta para: "${text}"`);
   
-  // ✅ USA TU CHATBOT EXISTENTE - misma lógica que tu API
   const chatbotResponse = findResponse(text);
   
-  console.log(`🤖 Respuesta del chatbot: ${chatbotResponse.message.substring(0, 50)}...`);
+  console.log(`🤖 Respuesta del chatbot: ${chatbotResponse.message.substring(0, 80)}...`);
   
-  // Enviar la respuesta automáticamente por WhatsApp
+  // Enviar la respuesta de texto
   await sendMessage(phone, chatbotResponse.message);
+
+  // Si es un saludo, enviar también el MENÚ con BOTONES
+  const lower = text.toLowerCase().trim();
+  const isGreeting = KEYWORDS.saludos.some((keyword) => lower.includes(keyword));
+
+  if (isGreeting) {
+    console.log('🔘 Enviando menú con botones interactivos');
+    await sendMainMenuButtons(phone);
+  }
 }
 
 // MANEJAR BOTONES INTERACTIVOS - MAPEA A TU CHATBOT
@@ -109,6 +116,9 @@ async function handleInteractiveMessage(phone: string, message: any) {
 
   // Mapeo de botones a respuestas de TU chatbot
   const buttonMap: Record<string, string> = {
+    'btn_soporte': 'soporte',
+    'btn_sublimacion': 'sublimacion',
+    'btn_ropa': 'ropa',
     'btn_catalogo': 'productos',
     'btn_envios': 'envios', 
     'btn_pagos': 'pagos',
@@ -124,11 +134,10 @@ async function handleInteractiveMessage(phone: string, message: any) {
 }
 
 // =============================================
-// 🚀 FUNCIÓN PARA ENVIAR MENSAJES
+// 🚀 FUNCIÓN PARA ENVIAR MENSAJES DE TEXTO
 // =============================================
 
 async function sendMessage(phone: string, text: string) {
-  // Validar que tenemos las variables necesarias
   if (!process.env.WHATSAPP_ACCESS_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID) {
     console.error('❌ Faltan variables de entorno de WhatsApp');
     return;
@@ -166,5 +175,83 @@ async function sendMessage(phone: string, text: string) {
     return result;
   } catch (error) {
     console.error('❌ Error de conexión con Meta API:', error);
+  }
+}
+
+// =============================================
+// 🚀 FUNCIÓN PARA ENVIAR MENÚ CON BOTONES
+// =============================================
+
+async function sendMainMenuButtons(phone: string) {
+  if (!process.env.WHATSAPP_ACCESS_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID) {
+    console.error('❌ Faltan variables de entorno de WhatsApp');
+    return;
+  }
+
+  const url = `https://graph.facebook.com/v18.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`;
+
+  const payload = {
+    messaging_product: 'whatsapp',
+    to: phone,
+    type: 'interactive',
+    interactive: {
+      type: 'button',
+      body: {
+        text: 'Elija una opción para continuar 👇'
+      },
+      footer: {
+        text: 'L & X Multiservicios – Innovando contigo'
+      },
+      action: {
+        buttons: [
+          {
+            type: 'reply',
+            reply: {
+              id: 'btn_soporte',
+              title: '🛠️ Soporte'
+            }
+          },
+          {
+            type: 'reply',
+            reply: {
+              id: 'btn_sublimacion',
+              title: '🎨 Sublimación'
+            }
+          },
+          {
+            type: 'reply',
+            reply: {
+              id: 'btn_ropa',
+              title: '👕 Ropa / Catálogo'
+            }
+          }
+        ]
+      }
+    }
+  };
+
+  console.log(`📤 Enviando MENÚ con botones a ${phone}`);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (result.error) {
+      console.error('❌ Error enviando botones interactivos:', result.error);
+    } else {
+      console.log('✅ Menú con botones enviado correctamente');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('❌ Error de conexión con Meta API (botones):', error);
   }
 }
