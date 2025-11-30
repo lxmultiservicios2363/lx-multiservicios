@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findResponse, KEYWORDS } from '@/lib/chatbot-responses';
 
-// VERIFICACIÓN DEL WEBHOOK (GET) - CON TOKEN FIJO
+// =============================
+// 🔐 CONFIG
+// =============================
+const VERIFY_TOKEN =
+  process.env.WHATSAPP_VERIFY_TOKEN || 'lx_multiservicios_2024_token';
+
+// =============================================
+// ✅ VERIFICACIÓN DEL WEBHOOK (GET)
+// =============================================
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const mode = searchParams.get('hub.mode');
@@ -12,24 +20,26 @@ export async function GET(request: NextRequest) {
   console.log('🔹 Mode:', mode);
   console.log('🔹 Token recibido:', token);
   console.log('🔹 Challenge:', challenge);
-  
-  // ✅ VERIFICACIÓN FORZADA - TOKEN FIJO
-  const expectedToken = 'lx_multiservicios_2024_token';
-  
-  if (mode === 'subscribe' && token === expectedToken) {
+
+  if (mode === 'subscribe' && token === VERIFY_TOKEN) {
     console.log('🎉 ✅ WEBHOOK VERIFICADO EXITOSAMENTE!');
     return new NextResponse(challenge, { status: 200 });
   }
 
   console.log('❌ FALLA EN VERIFICACIÓN');
-  console.log('🔹 Razón:', token === expectedToken ? 'Mode incorrecto' : 'Tokens diferentes');
+  console.log(
+    '🔹 Razón:',
+    token === VERIFY_TOKEN ? 'Mode incorrecto' : 'Tokens diferentes'
+  );
   console.log('🔹 Token recibido:', token);
-  console.log('🔹 Token esperado:', expectedToken);
-  
+  console.log('🔹 Token esperado (env):', VERIFY_TOKEN);
+
   return new NextResponse('Verification failed', { status: 403 });
 }
 
-// RECEPCIÓN DE MENSAJES (POST) - INTEGRADO CON TU CHATBOT
+// =============================================
+// 📥 RECEPCIÓN DE MENSAJES (POST)
+// =============================================
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -41,7 +51,7 @@ export async function POST(request: NextRequest) {
       const entry = body.entry?.[0];
       const changes = entry?.changes?.[0];
       const value = changes?.value;
-      
+
       // Procesar mensajes entrantes
       if (value?.messages) {
         for (const message of value.messages) {
@@ -55,17 +65,21 @@ export async function POST(request: NextRequest) {
 
     console.log('❌ Mensaje no es de WhatsApp Business');
     return NextResponse.json({ error: 'Invalid webhook' }, { status: 400 });
-    
   } catch (error) {
     console.error('💥 ERROR EN WEBHOOK:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Internal server error',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }
 
-// PROCESAR MENSAJES - USA TU BASE DE CONOCIMIENTO EXISTENTE
+// =============================================
+// 🤖 LÓGICA DEL CHATBOT
+// =============================================
 async function processMessage(message: any) {
   const userPhone = message.from;
   const messageType = message.type;
@@ -88,14 +102,15 @@ async function processMessage(message: any) {
   }
 }
 
-// MANEJAR MENSAJES DE TEXTO - INTEGRADO CON TU CHATBOT
 async function handleTextMessage(phone: string, text: string) {
   console.log(`🔍 Buscando respuesta para: "${text}"`);
-  
+
   const chatbotResponse = findResponse(text);
-  
-  console.log(`🤖 Respuesta del chatbot: ${chatbotResponse.message.substring(0, 80)}...`);
-  
+
+  console.log(
+    `🤖 Respuesta del chatbot: ${chatbotResponse.message.substring(0, 80)}...`
+  );
+
   // Enviar la respuesta de texto
   await sendMessage(phone, chatbotResponse.message);
 
@@ -109,34 +124,31 @@ async function handleTextMessage(phone: string, text: string) {
   }
 }
 
-// MANEJAR BOTONES INTERACTIVOS - MAPEA A TU CHATBOT
 async function handleInteractiveMessage(phone: string, message: any) {
   const buttonId = message.interactive?.button_reply?.id;
   console.log(`🔘 Botón presionado: ${buttonId}`);
 
-  // Mapeo de botones a respuestas de TU chatbot
   const buttonMap: Record<string, string> = {
-    'btn_soporte': 'soporte',
-    'btn_sublimacion': 'sublimacion',
-    'btn_ropa': 'ropa',
-    'btn_catalogo': 'productos',
-    'btn_envios': 'envios', 
-    'btn_pagos': 'pagos',
-    'btn_horarios': 'horarios',
-    'btn_productos': 'productos'
+    btn_soporte: 'soporte',
+    btn_sublimacion: 'sublimacion',
+    btn_ropa: 'ropa',
+    btn_catalogo: 'productos',
+    btn_envios: 'envios',
+    btn_pagos: 'pagos',
+    btn_horarios: 'horarios',
+    btn_productos: 'productos',
   };
 
   const responseKey = buttonMap[buttonId] || 'saludo';
   console.log(`🔍 Buscando respuesta para clave: ${responseKey}`);
-  
+
   const chatbotResponse = findResponse(responseKey);
   await sendMessage(phone, chatbotResponse.message);
 }
 
 // =============================================
-// 🚀 FUNCIÓN PARA ENVIAR MENSAJES DE TEXTO
+// 🚀 ENVIAR MENSAJE DE TEXTO
 // =============================================
-
 async function sendMessage(phone: string, text: string) {
   if (!process.env.WHATSAPP_ACCESS_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID) {
     console.error('❌ Faltan variables de entorno de WhatsApp');
@@ -144,34 +156,36 @@ async function sendMessage(phone: string, text: string) {
   }
 
   const url = `https://graph.facebook.com/v18.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`;
-  
+
   const messageData = {
     messaging_product: 'whatsapp',
     to: phone,
-    text: { body: text }
+    text: { body: text },
   };
 
   console.log(`📤 Enviando mensaje a ${phone}:`);
-  console.log(`💭 "${text.substring(0, 100)}${text.length > 100 ? '...' : ''}"`);
+  console.log(
+    `💭 "${text.substring(0, 100)}${text.length > 100 ? '...' : ''}"`
+  );
 
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(messageData),
     });
 
     const result = await response.json();
-    
+
     if (result.error) {
       console.error('❌ Error enviando mensaje:', result.error);
     } else {
       console.log('✅ Mensaje enviado exitosamente a WhatsApp');
     }
-    
+
     return result;
   } catch (error) {
     console.error('❌ Error de conexión con Meta API:', error);
@@ -179,9 +193,8 @@ async function sendMessage(phone: string, text: string) {
 }
 
 // =============================================
-// 🚀 FUNCIÓN PARA ENVIAR MENÚ CON BOTONES
+// 🚀 ENVIAR MENÚ CON BOTONES
 // =============================================
-
 async function sendMainMenuButtons(phone: string) {
   if (!process.env.WHATSAPP_ACCESS_TOKEN || !process.env.WHATSAPP_PHONE_NUMBER_ID) {
     console.error('❌ Faltan variables de entorno de WhatsApp');
@@ -197,10 +210,10 @@ async function sendMainMenuButtons(phone: string) {
     interactive: {
       type: 'button',
       body: {
-        text: 'Elija una opción para continuar 👇'
+        text: 'Elija una opción para continuar 👇',
       },
       footer: {
-        text: 'L & X Multiservicios – Innovando contigo'
+        text: 'L & X Multiservicios – Innovando contigo',
       },
       action: {
         buttons: [
@@ -208,26 +221,26 @@ async function sendMainMenuButtons(phone: string) {
             type: 'reply',
             reply: {
               id: 'btn_soporte',
-              title: '🛠️ Soporte'
-            }
+              title: '🛠️ Soporte',
+            },
           },
           {
             type: 'reply',
             reply: {
               id: 'btn_sublimacion',
-              title: '🎨 Sublimación'
-            }
+              title: '🎨 Sublimación',
+            },
           },
           {
             type: 'reply',
             reply: {
               id: 'btn_ropa',
-              title: '👕 Ropa / Catálogo'
-            }
-          }
-        ]
-      }
-    }
+              title: '👕 Ropa / Catálogo',
+            },
+          },
+        ],
+      },
+    },
   };
 
   console.log(`📤 Enviando MENÚ con botones a ${phone}`);
@@ -236,7 +249,7 @@ async function sendMainMenuButtons(phone: string) {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
