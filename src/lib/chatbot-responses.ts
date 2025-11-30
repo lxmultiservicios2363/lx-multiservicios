@@ -31,8 +31,10 @@ export const KEYWORDS = {
     'conjuntos deportivos', 'ropa deportiva', 'deportivo'
   ],
 
-  // Productos
+  // Productos generales
   productos: ['producto', 'productos', 'catálogo', 'catalogo', 'qué tienen', 'precios'],
+
+  // Productos específicos
   sueter: ['suéter', 'sueter', 'sweater'],
   camiseta: ['camiseta', 'camisa', 'playera', 'polera'],
   buso: ['buso', 'buzo', 'sudadera', 'hoodie'],
@@ -48,7 +50,10 @@ export const KEYWORDS = {
   pagos: ['pago', 'pagos', 'transferencia', 'qr', 'efectivo', 'banco', 'cuenta'],
 
   // Horarios / Ubicación
-  horarios: ['horario', 'horarios', 'atención', 'atencion', 'abierto', 'cierra', 'ubicación', 'ubicacion', 'dirección', 'direccion', 'maps'],
+  horarios: [
+    'horario', 'horarios', 'atención', 'atencion', 'abierto', 'cierra',
+    'ubicación', 'ubicacion', 'dirección', 'direccion', 'maps'
+  ],
 
   // Despedidas
   despedidas: ['gracias', 'bye', 'adios', 'adiós', 'chao', 'nos vemos']
@@ -153,6 +158,62 @@ Indíqueme la prenda, talla y cantidad 😊`
 • Tomatodos Personalizados: $3.50  
 
 ¿Qué producto desea ver? 😊`
+  },
+
+  // 🔹 SUÉTERES
+  'sueter': {
+    message: `🧥 *SUÉTERES / BUZOS L & X Multiservicios*\n\n` +
+    `👕 *Suéter Hombre*: $12\n` +
+    `👚 *Suéter Mujer*: $8\n\n` +
+    `Disponibles en varias tallas y colores.\n` +
+    `Dígame modelo, talla y cantidad para ayudarle 😊`
+  },
+
+  // 🔹 CAMISETAS
+  'camiseta': {
+    message: `👕 *CAMISETAS PERSONALIZADAS*\n\n` +
+    `• Camiseta hombre/mujer: $5\n` +
+    `• Estampado a un color incluido\n\n` +
+    `Puede indicarme talla (S, M, L, XL) y si desea diseño personalizado.`
+  },
+
+  // 🔹 BUSOS / HOODIES
+  'buso': {
+    message: `🧥 *BUSOS / HOODIES PERSONALIZADOS*\n\n` +
+    `• Busos estampados: $10\n` +
+    `• Conjuntos estampados: $22\n\n` +
+    `Dígame si busca para dama, caballero o niño, y la talla aproximada.`
+  },
+
+  // 🔹 TAZAS
+  'taza': {
+    message: `☕ *TAZAS PERSONALIZADAS*\n\n` +
+    `• Tazas sublimadas: $2.50\n` +
+    `• Tazas personalizadas (foto, frase, logo): $3.50\n\n` +
+    `Puede enviarnos la imagen o el texto que desea estampar 😊`
+  },
+
+  // 🔹 COJINES
+  'cojin': {
+    message: `🛋️ *COJINES PERSONALIZADOS*\n\n` +
+    `• Cojines sublimados: $3.00\n\n` +
+    `Perfectos para regalos o decoración.\n` +
+    `Dígame cantidad y si tiene algún diseño en mente.`
+  },
+
+  // 🔹 TOMATODOS / TERMOS
+  'tomatodo': {
+    message: `🥤 *TOMATODOS / TERMOS PERSONALIZADOS*\n\n` +
+    `• Tomatodos personalizados: $3.50\n\n` +
+    `Ideales para regalos, promociones o uso personal.\n` +
+    `Indíqueme cuántos necesita y si llevan logo o nombre.`
+  },
+
+  // 🔹 CONJUNTOS
+  'conjunto': {
+    message: `👕 *CONJUNTOS DEPORTIVOS / ESTAMPADOS*\n\n` +
+    `• Conjuntos estampados: $22\n\n` +
+    `Puede indicarme talla, color y si desea personalización con nombre o número.`
   },
 
   // 🚚 ENVÍOS
