@@ -56,13 +56,13 @@ export default function HomePage() {
         
         {/* SLIDER PROPORCIONAL - IMÁGENES COMPLETAS */}
         <section className="relative w-full 
-          h-[40vh]  /* Altura proporcional para móvil */
-          min-h-[250px] /* Mínimo para que se vea bien */
-          sm:h-[45vh] /* Tablet pequeña */
-          md:h-[50vh] /* Tablet */
-          lg:h-[55vh] /* Laptop */
-          xl:h-[60vh] /* Desktop */
-          max-h-[500px] /* Límite máximo */
+          h-[40vh]
+          min-h-[250px]
+          sm:h-[45vh]
+          md:h-[50vh]
+          lg:h-[55vh]
+          xl:h-[60vh]
+          max-h-[500px]
           overflow-hidden rounded-xl sm:rounded-2xl shadow-xl 
           bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 
           mt-4 sm:mt-6 mx-auto"
@@ -73,7 +73,7 @@ export default function HomePage() {
             {SLIDES.map((slide, i) => (
               <div key={slide.id} className="relative w-full h-full flex-shrink-0">
                 
-                {/* CONTENEDOR DE IMAGEN CON OBJECT-CONTAIN PARA VER IMAGEN COMPLETA */}
+                {/* CONTENEDOR DE IMAGEN */}
                 <div className="relative w-full h-full flex items-center justify-center bg-gray-100">
                   <Image
                     src={getImageUrl(slide.id)}
@@ -87,15 +87,12 @@ export default function HomePage() {
                   />
                 </div>
                 
-                {/* OVERLAY DE CONTENIDO MEJORADO */}
+                {/* OVERLAY DE TEXTO */}
                 {(slide.title || slide.subtitle) && (
                   <div className="absolute inset-0 bg-black/25 flex flex-col items-center justify-center text-white text-center px-4 sm:px-6 z-10">
                     {slide.title && (
                       <h2 className="
-                        text-lg /* Móvil */
-                        sm:text-xl /* Móvil grande */
-                        md:text-2xl /* Tablet */
-                        lg:text-3xl /* Laptop */
+                        text-lg sm:text-xl md:text-2xl lg:text-3xl
                         font-bold mb-2 sm:mb-3 
                         drop-shadow-2xl 
                         bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent 
@@ -106,14 +103,9 @@ export default function HomePage() {
                     )}
                     {slide.subtitle && (
                       <p className="
-                        text-xs /* Móvil */
-                        sm:text-sm /* Móvil grande */
-                        md:text-base /* Tablet */
-                        lg:text-lg /* Laptop */
+                        text-xs sm:text-sm md:text-base lg:text-lg
                         drop-shadow-2xl opacity-95 font-light 
-                        max-w-xs /* Móvil */
-                        sm:max-w-sm /* Móvil grande */
-                        md:max-w-md /* Tablet */
+                        max-w-xs sm:max-w-sm md:max-w-md
                         leading-relaxed px-2
                       ">
                         {slide.subtitle}
@@ -125,20 +117,14 @@ export default function HomePage() {
             ))}
           </div>
           
-          {/* BOTONES INDICADORES MÁS DISCRETOS */}
-          <div className="absolute 
-            bottom-3 /* Móvil */
-            sm:bottom-4 /* Tablet */
-            left-1/2 -translate-x-1/2 
-            flex gap-2 z-20"
-          >
+          {/* INDICADORES DEL SLIDER */}
+          <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
                 className={`
-                  w-2 h-2 /* Móvil */
-                  sm:w-2.5 sm:h-2.5 /* Tablet */
+                  w-2 h-2 sm:w-2.5 sm:h-2.5
                   rounded-full transition-all duration-300 
                   ${i === current 
                     ? "bg-white scale-110 shadow-lg shadow-white/40" 
@@ -150,27 +136,25 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* BOTÓN CATÁLOGO MÁS COMPACTO */}
+        {/* BOTONES: CATÁLOGO + POLÍTICA DE PRIVACIDAD */}
         <section className="max-w-2xl mx-auto w-full py-6 sm:py-8 px-4">
-          <div className="grid grid-cols-1 justify-items-center">
+          <div className="grid grid-cols-1 gap-4 justify-items-center">
+
+            {/* Botón Catálogo */}
             <Link 
               href="/catalogo" 
               className="
                 bg-gradient-to-r from-purple-600 to-pink-600 
                 text-white 
-                py-3 /* Móvil */
-                sm:py-3 /* Tablet+ */
-                px-8 /* Móvil */
-                sm:px-10 /* Tablet+ */
-                rounded-lg /* Móvil */
-                sm:rounded-xl /* Tablet+ */
+                py-3 sm:py-3
+                px-8 sm:px-10
+                rounded-lg sm:rounded-xl
                 shadow-lg 
                 hover:from-purple-700 hover:to-pink-700 
                 transition-all duration-300 
-                text-base /* Móvil */
-                sm:text-lg /* Tablet+ */
+                text-base sm:text-lg
                 font-bold 
-                min-w-[150px] /* Móvil */
+                min-w-[150px]
                 text-center 
                 border-2 border-white/30 
                 hover:scale-105 transform 
@@ -181,6 +165,29 @@ export default function HomePage() {
             >
               Ver Catálogo
             </Link>
+
+            {/* Botón Política de Privacidad */}
+            <Link
+              href="/politica-de-privacidad"
+              className="
+                bg-gray-800/80 
+                text-white 
+                py-2.5 sm:py-3
+                px-8 sm:px-10
+                rounded-lg sm:rounded-xl
+                border border-white/20
+                text-sm sm:text-base
+                hover:bg-gray-900 
+                transition-all duration-300
+                min-w-[150px]
+                text-center
+                hover:scale-105
+                active:scale-95
+              "
+            >
+              Política de Privacidad
+            </Link>
+
           </div>
         </section>
 
